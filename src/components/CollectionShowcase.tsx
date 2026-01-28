@@ -7,17 +7,51 @@ import product3 from "@/assets/product-3.jpg";
 const collections = [
   {
     id: 1,
-    name: "Anime Essentials",
-    description: "Iconic quotes & characters",
+    name: "Anime",
+    description: "Iconic anime-inspired streetwear",
     image: product1,
-    itemCount: 24,
   },
   {
     id: 2,
-    name: "Street Minimalist",
-    description: "Clean aesthetic pieces",
+    name: "Quotes",
+    description: "Memorable lines that inspire",
     image: product3,
-    itemCount: 18,
+  },
+  {
+    id: 3,
+    name: "Gaming",
+    description: "Level up your wardrobe",
+    image: product1,
+  },
+  {
+    id: 4,
+    name: "Gym",
+    description: "Performance meets style",
+    image: product3,
+  },
+  {
+    id: 5,
+    name: "Cartoons",
+    description: "Nostalgic cartoon vibes",
+    image: product1,
+  },
+  {
+    id: 6,
+    name: "Men",
+    description: "Essential fits for him",
+    image: product3,
+  },
+  {
+    id: 7,
+    name: "Women",
+    description: "Bold styles for her",
+    image: product1,
+  },
+  {
+    id: 8,
+    name: "Kids",
+    description: "Cool looks for little ones",
+    image: product3,
   },
 ];
 
@@ -39,7 +73,7 @@ const CollectionShowcase = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
           {collections.map((collection, index) => (
             <motion.div
               key={collection.id}
@@ -49,10 +83,10 @@ const CollectionShowcase = () => {
               transition={{ delay: index * 0.1 }}
             >
               <Link
-                to="/collections"
+                to={`/collections?category=${encodeURIComponent(collection.name)}`}
                 className="group block relative overflow-hidden rounded-2xl card-glow"
               >
-                <div className="aspect-[16/9] lg:aspect-[16/7]">
+                <div className="aspect-square">
                   <img
                     src={collection.image}
                     alt={collection.name}
@@ -61,12 +95,12 @@ const CollectionShowcase = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-8">
-                  <span className="text-primary text-sm font-medium">
-                    {collection.itemCount} Items
-                  </span>
                   <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-2">
                     {collection.name}
                   </h3>
+                  <p className="text-muted-foreground mb-4">
+                    {collection.description}
+                  </p>
                   <p className="text-muted-foreground mb-4">
                     {collection.description}
                   </p>
