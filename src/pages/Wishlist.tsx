@@ -29,6 +29,9 @@ const Wishlist = () => {
       price: firstVariant.price,
       quantity: 1,
       selectedOptions: firstVariant.selectedOptions,
+      title: product.node.title,
+      imageUrl: product.node.images.edges[0]?.node.url || null,
+      handle: product.node.handle
     });
 
     toast.success("Added to cart!");

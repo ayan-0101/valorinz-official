@@ -18,6 +18,10 @@ export interface CartItem {
   price: { amount: string; currencyCode: string };
   quantity: number;
   selectedOptions: Array<{ name: string; value: string }>;
+  // Flattened fields for reliable display after localStorage restore
+  title: string;
+  imageUrl: string | null;
+  handle: string;
 }
 
 interface CartStore {
