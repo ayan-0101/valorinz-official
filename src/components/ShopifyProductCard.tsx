@@ -43,7 +43,10 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
       variantTitle: firstVariant.title,
       price: firstVariant.price,
       quantity: 1,
-      selectedOptions: firstVariant.selectedOptions || []
+      selectedOptions: firstVariant.selectedOptions || [],
+      title: node.title,
+      imageUrl: image || null,
+      handle: node.handle
     });
 
     toast.success("Added to cart!", {

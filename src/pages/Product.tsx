@@ -38,7 +38,10 @@ const Product = () => {
       variantTitle: variant.title,
       price: variant.price,
       quantity,
-      selectedOptions: variant.selectedOptions || []
+      selectedOptions: variant.selectedOptions || [],
+      title: product.title,
+      imageUrl: images[0] || null,
+      handle: product.handle
     });
 
     toast.success("Added to cart!", {

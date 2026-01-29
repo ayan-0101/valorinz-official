@@ -101,19 +101,23 @@ const CartDrawer = () => {
                     >
                       {/* Image */}
                       <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
-                        {item.product.node.images?.edges?.[0]?.node && (
+                        {item.imageUrl ? (
                           <img
-                            src={item.product.node.images.edges[0].node.url}
-                            alt={item.product.node.title}
+                            src={item.imageUrl}
+                            alt={item.title}
                             className="w-full h-full object-cover"
                           />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
+                            No Image
+                          </div>
                         )}
                       </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-sm truncate">
-                          {item.product.node.title}
+                          {item.title}
                         </h4>
                         <p className="text-xs text-muted-foreground mb-1">
                           {item.selectedOptions.map(opt => opt.value).join(' / ')}
