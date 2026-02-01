@@ -1,1 +1,11 @@
 project_id = "dacycqbesonzimqqvfzi"
+
+[auth]
+site_url = "env(SITE_URL)"
+additional_redirect_urls = ["https://id-preview--234f5c1f-f5c4-4ffb-8be4-8fa99db48707.lovable.app"]
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+sender_name = "VALORINz Store"
