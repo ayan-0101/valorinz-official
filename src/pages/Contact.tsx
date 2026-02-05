@@ -31,6 +31,7 @@ const Contact = () => {
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         {
+          from_name: "VALORINz official",
           subject: formData.subject,
           from_email: formData.email,
           message: `The user ${formData.name} has query:\n\n${formData.message}\n\nConnect with them soon.`,

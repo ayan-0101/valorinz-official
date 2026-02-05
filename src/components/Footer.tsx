@@ -1,8 +1,47 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Instagram, Twitter, Youtube, Mail } from "lucide-react";
+import { Instagram, Twitter, Youtube, Mail, Loader2 } from "lucide-react";
 import logoImage from "@/assets/logo.png";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
+
+const EMAILJS_SERVICE_ID = "service_u604rvn";
+const EMAILJS_TEMPLATE_ID = "template_hkmbf1l";
+const EMAILJS_PUBLIC_KEY = "yIjYbCC8V7Z0mbkLt";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setIsSubmitting(true);
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: "VALORINz official",
+          subject: "New Newsletter Subscription",
+          from_email: email,
+          message: `New subscriber: ${email}\n\nThis user wants to receive exclusive drops and early access updates.`,
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+      toast.success("Subscribed successfully!", {
+        description: "You'll receive our exclusive drops and early access.",
+      });
+      setEmail("");
+    } catch (error) {
+      console.error("Subscription error:", error);
+      toast.error("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-16">
@@ -91,16 +130,23 @@ const Footer = () => {
             <p className="text-muted-foreground text-sm mb-4">
               Subscribe for exclusive drops and early access.
             </p>
-            <div className="flex gap-2">
+            <form onSubmit={handleSubscribe} className="flex gap-2">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
+                required
                 className="flex-1 px-4 py-2 bg-muted border border-border rounded-lg text-sm focus:outline-none focus:border-primary transition-colors"
               />
-              <button className="p-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity">
-                <Mail size={18} />
+              <button 
+                type="submit"
+                disabled={isSubmitting}
+                className="p-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Mail size={18} />}
               </button>
-            </div>
+            </form>
           </div>
         </div>
 
