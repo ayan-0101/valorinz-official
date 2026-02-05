@@ -1,20 +1,66 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
+// Hero background images - using the existing hero and placeholder variations
+const heroBackgrounds = [
+  heroImage,
+  "https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1920&q=80", // Streetwear aesthetic
+  "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1920&q=80", // Urban fashion
+  "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80", // Fashion model
+];
+
 const HeroSection = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroBackgrounds.length);
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background Image */}
+      {/* Background Carousel */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={heroImage}
-          alt="Hero"
-          className="w-full h-full object-cover object-center"
-        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            <img
+              src={heroBackgrounds[currentSlide]}
+              alt="Hero"
+              className="w-full h-full object-cover object-center"
+            />
+          </motion.div>
+        </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {heroBackgrounds.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              currentSlide === index
+                ? "w-8 bg-primary"
+                : "bg-muted-foreground/50 hover:bg-muted-foreground"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
       </div>
 
       {/* Content */}
