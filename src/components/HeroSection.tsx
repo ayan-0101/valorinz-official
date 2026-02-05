@@ -2,21 +2,37 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
 
-// Hero background images - using the existing hero and placeholder variations
+// Hero background images - hoodies and t-shirts
 const heroBackgrounds = [
-  heroImage,
-  "https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1920&q=80", // Streetwear aesthetic
-  "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1920&q=80", // Urban fashion
-  "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80", // Fashion model
+  "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=1920&q=80", // Person in hoodie
+  "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1920&q=80", // White t-shirt
+  "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1920&q=80", // Hoodie rack
+  "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=1920&q=80", // T-shirts display
 ];
+
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction < 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+};
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % heroBackgrounds.length);
     }, 5000); // Change every 5 seconds
 
@@ -26,14 +42,16 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       {/* Background Carousel */}
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0"
           >
             <img
@@ -43,8 +61,8 @@ const HeroSection = () => {
             />
           </motion.div>
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
       </div>
 
       {/* Slide Indicators */}
@@ -52,7 +70,10 @@ const HeroSection = () => {
         {heroBackgrounds.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentSlide(index)}
+            onClick={() => {
+              setDirection(index > currentSlide ? 1 : -1);
+              setCurrentSlide(index);
+            }}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
               currentSlide === index
                 ? "w-8 bg-primary"
