@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
-// Hero background images - hoodies and t-shirts
+// Hero background images - people wearing hoodies and t-shirts
 const heroBackgrounds = [
-  "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=1920&q=80", // Person in hoodie
-  "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1920&q=80", // White t-shirt
-  "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=1920&q=80", // Hoodie rack
-  "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=1920&q=80", // T-shirts display
+  "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=1920&q=80", // Person in black hoodie
+  "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1920&q=80", // Model in streetwear
+  "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=1920&q=80", // Man in hoodie urban style
+  "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1920&q=80", // Woman in casual streetwear
 ];
 
 const slideVariants = {
