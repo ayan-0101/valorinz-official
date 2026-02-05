@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader2, SlidersHorizontal, X, PackageOpen } from "lucide-react";
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -8,13 +9,29 @@ import ShopifyProductCard from "@/components/ShopifyProductCard";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { useShopifyCollections } from "@/hooks/useShopifyCollections";
 
 const Collections = () => {
+  const [searchParams] = useSearchParams();
+  const collectionHandle = searchParams.get("collection");
+  
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
+  const [selectedCollection, setSelectedCollection] = useState<string>("All");
 
-  const { data: products, isLoading, error } = useShopifyProducts(50);
+  const { data: collections } = useShopifyCollections(20);
+  
+  // Build query based on selected collection
+  const collectionQuery = selectedCollection !== "All" ? `tag:${selectedCollection}` : undefined;
+  const { data: products, isLoading, error } = useShopifyProducts(50, collectionQuery);
+
+  // Sync URL param with state
+  useEffect(() => {
+    if (collectionHandle) {
+      setSelectedCollection(collectionHandle);
+    }
+  }, [collectionHandle]);
 
   // Filter products based on price range and stock
   const filteredProducts = products?.filter((product) => {
@@ -24,13 +41,10 @@ const Collections = () => {
     return priceMatch && stockMatch;
   }) || [];
 
-  // Get unique product types for categories
-  const categories = ["All", ...new Set(products?.map(p => p.node.productType).filter(Boolean) || [])];
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  // Get collection titles for filter
+  const collectionTitles = ["All", ...(collections?.map(c => c.node.handle) || [])];
 
-  const displayProducts = selectedCategory === "All" 
-    ? filteredProducts 
-    : filteredProducts.filter(p => p.node.productType === selectedCategory);
+  const displayProducts = filteredProducts;
 
   return (
     <div className="min-h-screen bg-background">
@@ -65,23 +79,27 @@ const Collections = () => {
               {/* Filters - Desktop */}
               <aside className="hidden lg:block w-64 flex-shrink-0">
                 <div className="sticky top-24 space-y-8">
-                  {categories.length > 1 && (
+                  {collectionTitles.length > 1 && (
                     <div>
-                      <h3 className="font-display font-semibold mb-4">Categories</h3>
+                      <h3 className="font-display font-semibold mb-4">Collections</h3>
                       <div className="space-y-2">
-                        {categories.map((cat) => (
-                          <button
-                            key={cat}
-                            onClick={() => setSelectedCategory(cat)}
-                            className={`block w-full text-left px-4 py-2 rounded-lg transition-all ${
-                              selectedCategory === cat
-                                ? "bg-primary text-primary-foreground"
-                                : "text-muted-foreground hover:bg-muted"
-                            }`}
-                          >
-                            {cat || "Uncategorized"}
-                          </button>
-                        ))}
+                        {collectionTitles.map((handle) => {
+                          const collection = collections?.find(c => c.node.handle === handle);
+                          const displayName = handle === "All" ? "All" : (collection?.node.title || handle);
+                          return (
+                            <button
+                              key={handle}
+                              onClick={() => setSelectedCollection(handle)}
+                              className={`block w-full text-left px-4 py-2 rounded-lg transition-all ${
+                                selectedCollection === handle
+                                  ? "bg-primary text-primary-foreground"
+                                  : "text-muted-foreground hover:bg-muted"
+                              }`}
+                            >
+                              {displayName}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
