@@ -253,7 +253,21 @@ export const useCartStore = create<CartStore>()(
 
       clearCart: () => set({ items: [], cartId: null, checkoutUrl: null }),
       
-      getCheckoutUrl: () => get().checkoutUrl,
+      getCheckoutUrl: () => {
+        const url = get().checkoutUrl;
+        if (!url) return null;
+        // Always ensure checkout URL uses Shopify's domain
+        try {
+          const parsed = new URL(url);
+          if (parsed.hostname !== SHOPIFY_CHECKOUT_DOMAIN) {
+            parsed.hostname = SHOPIFY_CHECKOUT_DOMAIN;
+            return parsed.toString();
+          }
+        } catch {
+          return url;
+        }
+        return url;
+      },
 
       syncCart: async () => {
         const { cartId, isSyncing, clearCart } = get();
