@@ -38,7 +38,7 @@ const Header = () => {
           <Link to="/" className="flex-shrink-0">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="relative"
+              className="relative bg-black"
             >
               <img
                 src={logoImage}

@@ -2,10 +2,12 @@ import { motion } from "framer-motion";
 
 const AnnouncementBar = () => {
   const announcements = [
-    "🔥 FREE SHIPPING ON ORDERS OVER $100",
+    "🔥 FREE SHIPPING ON ORDERS OVER Rs 500",
     "✨ NEW DROPS EVERY FRIDAY",
-    "💎 USE CODE ANIME20 FOR 20% OFF",
     "🎌 LIMITED EDITION COLLECTION OUT NOW",
+    "💥 RESTOCK ALERT: FAN FAVORITES ARE BACK",
+    "👕 PREMIUM QUALITY OVERSIZED FITS",
+    "🎪 FOLLOW US ON INSTAGRAM @valorinz.official"
   ];
 
   return (
