@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, X, Minus, Plus, Trash2, ExternalLink, Loader2, ShoppingCart } from "lucide-react";
+import { ShoppingBag, X, Minus, Plus, Trash2, ArrowRight, Loader2, ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 
 const CartDrawer = () => {
+  const navigate = useNavigate();
   const { 
     items, 
     isLoading, 
@@ -12,7 +14,6 @@ const CartDrawer = () => {
     setIsOpen, 
     updateQuantity, 
     removeItem, 
-    getCheckoutUrl, 
     syncCart,
     totalItems,
     totalPrice 
@@ -23,11 +24,8 @@ const CartDrawer = () => {
   }, [isOpen, syncCart]);
 
   const handleCheckout = () => {
-    const checkoutUrl = getCheckoutUrl();
-    if (checkoutUrl) {
-      window.open(checkoutUrl, '_blank');
-      setIsOpen(false);
-    }
+    setIsOpen(false);
+    navigate('/checkout');
   };
 
   const itemCount = totalItems();
@@ -181,8 +179,8 @@ const CartDrawer = () => {
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <>
-                      <ExternalLink size={18} />
-                      Checkout with Shopify
+                      <ArrowRight size={18} />
+                      Proceed to Checkout
                     </>
                   )}
                 </button>
