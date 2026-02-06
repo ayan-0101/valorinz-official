@@ -42,9 +42,13 @@ interface CartStore {
   totalPrice: () => number;
 }
 
+const SHOPIFY_CHECKOUT_DOMAIN = 'q71pur-g1.myshopify.com';
+
 function formatCheckoutUrl(checkoutUrl: string): string {
   try {
     const url = new URL(checkoutUrl);
+    // Always use Shopify's domain for checkout (not custom domains)
+    url.hostname = SHOPIFY_CHECKOUT_DOMAIN;
     url.searchParams.set('channel', 'online_store');
     return url.toString();
   } catch {
